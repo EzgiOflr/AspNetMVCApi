@@ -14,6 +14,7 @@ namespace AspNetMVCApi_PL
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
+            UnityConfig.RegisterComponents(); 
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
@@ -21,3 +22,4 @@ namespace AspNetMVCApi_PL
         }
     }
 }
+//17.satırı read me de yazanlara göre ekledik.
