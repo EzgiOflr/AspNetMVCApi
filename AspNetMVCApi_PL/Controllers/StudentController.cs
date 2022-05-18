@@ -23,11 +23,11 @@ namespace AspNetMVCApi_PL.Controllers
 
 
         // GET api/<controller>
-        [System.Web.Http.Route("a")] 
+        [System.Web.Http.Route("a")]
 
         //getallstudents yazmak yerine yolda  /s/a yazdıgımda sayfayı cagırabilirim.
         //prefix koydum.
-        
+
         public ResponseData GetAllStudents()
         {
             try
@@ -46,14 +46,49 @@ namespace AspNetMVCApi_PL.Controllers
             }
         }
 
-
-        // GET api/<controller>/5
-
         // POST api/<controller>
+        //Öğrenci Ekleme
+        [HttpPost]
+        [System.Web.Http.Route("")]
 
-        // PUT api/<controller>/5
+        public ResponseData AddStudent([FromBody]StudentVM model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
 
-        // DELETE api/<controller>/5
+                    return new ResponseData()
+                    {
+                        IsSuccess = false,
+                        Message = "Veri girişleri düzgün olmalıdır!"
+                    };
+                }
+                model.RegisterDate = DateTime.Now;
+
+                ResponseData result = _studentService.AddStudent(model);
+                return new ResponseData()
+                {
+                    IsSuccess = true,
+                    Message = "Yeni öğrenci kaydı yapılmıştır."
+                };
+            }
+            catch (Exception ex)
+            {
+                //ex loglanabilir
+                return new ResponseData()
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
+        }
+
+
+
+      
+
+        
     }
 
 }
