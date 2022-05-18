@@ -23,7 +23,7 @@ namespace AspNetMVCApi_PL.Controllers
 
 
         // GET api/<controller>
-        [System.Web.Http.Route("a")]
+        [System.Web.Http.Route("")]
 
         //getallstudents yazmak yerine yolda  /s/a yazdıgımda sayfayı cagırabilirim.
         //prefix koydum.
@@ -51,7 +51,7 @@ namespace AspNetMVCApi_PL.Controllers
         [HttpPost]
         [System.Web.Http.Route("")]
 
-        public ResponseData AddStudent([FromBody]StudentVM model)
+        public ResponseData AddStudent([FromBody] StudentVM model)
         {
             try
             {
@@ -83,12 +83,106 @@ namespace AspNetMVCApi_PL.Controllers
                 };
             }
         }
+        //Öğrenci güncelleme 
+        //HTTPPut ya da HTTPPost kullanılır
+        //genelde put'u öneriyorlar ama postta kullanılabilir.
+        [HttpPut]
+        [System.Web.Http.Route("")]
+        public ResponseData UpdateStudent(int studentId, string name, string surname)
+        {
+            try
+            {
 
+                if (studentId > 0)
+                {
+                    ResponseData result =
+                        _studentService.UpdateStudent(studentId, name, surname);
 
+                    if (result.IsSuccess)
+                    {
+                        return new ResponseData()
+                        {
+                            IsSuccess = true,
+                            Message = "Öğrenci başarılı bir şekilde güncellendi!"
+                        };
+                    }
+                    else
+                    {
+                        return new ResponseData()
+                        {
+                            IsSuccess = false,
+                            Message = " HATA : Öğrenci güncelleme işleminde beklenmedik bir sorun oluştu!"
+                        };
+                    }
+                }
+                else
+                {
+                    return new ResponseData()
+                    {
+                        IsSuccess = false,
+                        Message = "Öğrenci bulunamadı!"
+                    };
+                }
 
-      
+            }
+            catch (Exception ex)
+            {
 
-        
+                //ex loglanabilir
+                return new ResponseData()
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
+
+        }
+
+        [HttpDelete]
+        [System.Web.Http.Route("")]
+        public ResponseData DeleteStudent(int id)
+        {
+            try
+            {
+                if (id > 0)
+                {
+                    var result = _studentService.DeleteStudent(id);
+
+                    if (result.IsSuccess)
+                    {
+                        return new ResponseData()
+                        {
+                            IsSuccess = true,
+                            Message = "Öğrenci sistemden silinmiştir!"
+                        };
+                    }
+                    else
+                    {
+                        return new ResponseData()
+                        {
+                            IsSuccess = false,
+                            Message = "HATA:Öğrenci silme işlemi başarısız oldu!"
+                        };
+                    }
+                }
+                else
+                {
+                    return new ResponseData()
+                    {
+                        IsSuccess = false,
+                        Message = "HATA: id bilgisi girişi düzgün olmalıdır!"
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                //ex loglanabilir
+                return new ResponseData()
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
+        }
     }
-
 }
